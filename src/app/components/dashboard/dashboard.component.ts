@@ -33,10 +33,11 @@ export class DashboardComponent implements OnInit {
 
   refreshUser() {
     this.user = this.userService.getUser();
+    this.loggedIn = this.userService.isLoggedIn();
     console.log(this.user?.token?.access_token);
   }
 
   shortToken(token: string) {
-    return `${token.slice(0, 10)}...${token.slice(-10)}`;
+    return token ? `${token?.slice(0, 10)}...${token?.slice(-10)}` : '';
   }
 }

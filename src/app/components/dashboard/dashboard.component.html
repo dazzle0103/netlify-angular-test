@@ -1,5 +1,5 @@
 <h1>Dashboard</h1>
-<div *ngIf="loggedIn; else RegisterTemplate">
+<div *ngIf="user; else RegisterTemplate">
   <h1>{{ user?.user_metadata?.full_name }}</h1>
   <mat-list>
     <mat-list-item>
