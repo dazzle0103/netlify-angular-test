@@ -47,35 +47,27 @@ export class UserService {
     this.user = netlifyIdentity.currentUser();
     //@ts-ignore
     netlifyIdentity.on('init', (user) => {
-      console.log('Init detected', user);
+      //@ts-ignore
+      console.log('Init detected', user, netlifyIdentity.currentUser());
       if (user) {
-        this.user = {
-          token: user?.token?.access_token,
-          username: user?.user_metadata?.full_name,
-          email: user?.email,
-          id: user?.id,
-        };
+        this.user = user;
       }
     });
 
     //@ts-ignore
     netlifyIdentity.on('login', (user) => {
-      console.log('Login detected');
-      this.user = {
-        token: user?.token?.access_token,
-        username: user?.user_metadata?.full_name,
-        email: user.email,
-        id: user.id,
-      };
+      //@ts-ignore
+      console.log('Login detected', user, netlifyIdentity.currentUser());
+      if (user) {
+        this.user = user;
+      }
     });
     //@ts-ignore
     netlifyIdentity.on('logout', () => {
-      this.user = {
-        token: '',
-        username: '',
-        email: '',
-        id: '',
-      };
+      //@ts-ignore
+      console.log('Login detected', netlifyIdentity.currentUser());
+      this.user = undefined;
+      console.log('after this.user = undefined', this.user);
     });
   }
 }
