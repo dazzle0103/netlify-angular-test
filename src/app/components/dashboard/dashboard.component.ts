@@ -15,21 +15,20 @@ export class DashboardComponent implements OnInit {
   user: any;
   userService: UserService = inject(UserService);
 
+  loggedIn: boolean = false;
   async ngOnInit() {
     this.user = this.userService.getUser();
+    this.loggedIn = this.userService.isLoggedIn();
   }
 
   login() {
-    //@ts-ignore
-    netlifyIdentity.open('login');
+    this.loggedIn = this.userService.login();
   }
   logout() {
-    //@ts-ignore
-    netlifyIdentity.logout();
+    this.loggedIn = this.userService.logout();
   }
   signUp() {
-    //@ts-ignore
-    netlifyIdentity.open('signup');
+    this.loggedIn = this.userService.signup();
   }
 
   refreshUser() {

@@ -14,17 +14,16 @@ export class DatabaseService {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('GetData - Response:', response);
       let res: { file: string; data: any[] } = await response.json();
       this.cache = res;
     }
-    console.log('database-service - cache:', this.getCachedData());
-    return this.getCachedData();
+    console.log('database-service - cache:', this.getCachedData(token));
+    return this.getCachedData(token);
   }
 
-  getCachedData() {
+  getCachedData(token: string) {
     console.log('getCachedData:', this.cache);
-    if (this.cache) {
+    if (this.cache && token) {
       return this.cache;
     }
     return { file: 'Errorfile', data: [] };

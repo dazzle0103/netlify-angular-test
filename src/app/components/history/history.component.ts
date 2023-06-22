@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DatabaseService } from 'src/app/services/database.service';
+import { UserService } from 'src/app/services/user.service';
 
 import { MatButtonModule } from '@angular/material/button';
 
@@ -15,21 +16,17 @@ import { MatButtonModule } from '@angular/material/button';
 export class HistoryComponent implements OnInit {
   trainingsList: any = [];
   databaseService: DatabaseService = inject(DatabaseService);
+  userService: UserService = inject(UserService);
 
   constructor() {}
   async ngOnInit() {
-    let cache = this.databaseService.getCachedData();
-    console.log('chache', cache?.data);
-
-    if (cache?.data?.length) {
-      this.trainingsList = cache?.data;
-      console.log('CACHED DATA: ', this.trainingsList);
-    }
-
-    //@ts-ignore
-    const user = netlifyIdentity.currentUser();
+    const user = this.userService.getUser();
     if (user) {
-      console.log('user', user);
+      let cache = this.databaseService.getCachedData(user?.token?.access_token);
+      if (cache?.data?.length) {
+        this.trainingsList = cache?.data;
+      }
+
       let updatedCache = await this.databaseService.getUpdatedCache(
         user?.token?.access_token
       );
@@ -39,7 +36,7 @@ export class HistoryComponent implements OnInit {
 
   async deleteHistory() {
     //@ts-ignore
-    const user = netlifyIdentity.currentUser();
+    const user = this.userService.getUser();
     await this.databaseService.deleteTraining(user?.token?.access_token);
 
     let updatedCache = await this.databaseService.getUpdatedCache(
