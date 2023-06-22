@@ -24,6 +24,9 @@ export class DashboardComponent implements OnInit {
     this.test$ = await this.userService.getTestData();
   }
 
+  incrementTest() {
+    this.userService.incrementTest();
+  }
   login() {
     this.loggedIn = this.userService.login();
   }
