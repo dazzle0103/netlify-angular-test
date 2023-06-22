@@ -1,12 +1,10 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService implements OnInit {
+export class UserService {
   user: any;
-
-  constructor() {}
 
   login() {
     this.user = this.getUser();
@@ -43,7 +41,8 @@ export class UserService implements OnInit {
     this.user = netlifyIdentity.currentUser();
     return this.user;
   }
-  ngOnInit(): void {
+
+  constructor() {
     //@ts-ignore
     this.user = netlifyIdentity.currentUser();
     //@ts-ignore
