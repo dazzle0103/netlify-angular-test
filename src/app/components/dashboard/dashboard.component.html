@@ -31,3 +31,8 @@
 <button (click)="refreshUser()" color="accent" mat-raised-button>
   Refresh User
 </button>
+
+<button (click)="userService.incrementTest()" color="accent" mat-raised-button>
+  TEST BUTTON
+</button>
+<h1>TESTDATA: {{ test$ | async }}</h1>

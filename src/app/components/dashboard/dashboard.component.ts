@@ -15,10 +15,13 @@ export class DashboardComponent implements OnInit {
   user: any;
   userService: UserService = inject(UserService);
 
+  test$: any;
+
   loggedIn: boolean = false;
   async ngOnInit() {
     this.user = this.userService.getUser();
     this.loggedIn = this.userService.isLoggedIn();
+    this.test$ = await this.userService.getTestData();
   }
 
   login() {

@@ -1,10 +1,19 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   user: any;
+  private test$ = new BehaviorSubject<number>(0);
+
+  incrementTest() {
+    this.test$.next(this.test$.value + 1);
+  }
+  async getTestData() {
+    return await firstValueFrom(this.test$);
+  }
 
   login() {
     this.user = this.getUser();
