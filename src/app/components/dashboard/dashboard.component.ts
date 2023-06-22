@@ -35,8 +35,6 @@ export class DashboardComponent implements OnInit {
     this.user = this.userService.getUser();
     this.loggedIn = this.userService.isLoggedIn();
     console.log(this.user?.token?.access_token);
-    //@ts-ignore
-    netlifyIdentity.open();
   }
 
   shortToken(token: string) {
