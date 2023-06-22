@@ -65,9 +65,9 @@ export class UserService {
     //@ts-ignore
     netlifyIdentity.on('logout', () => {
       //@ts-ignore
-      console.log('Login detected', netlifyIdentity.currentUser());
+      console.log('Logout detected', netlifyIdentity.currentUser());
       this.user = undefined;
-      console.log('after this.user = undefined', this.user);
+      console.log('after this.user', this.user);
     });
   }
 }
