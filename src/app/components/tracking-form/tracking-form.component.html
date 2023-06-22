@@ -1,0 +1,38 @@
+<!-- Input Form-->
+<h1>Tracking Form</h1>
+<h2>Amount of Pushups</h2>
+
+<form
+  [formGroup]="trainingForm"
+  (submit)="submitTraining()"
+  class="w-full h-full flex"
+>
+  <div class="w-3/4 mx-auto">
+    <div class="w-full">
+      <mat-form-field class="w-full">
+        <mat-label for="training">Enter Training Data</mat-label>
+        <input
+          placeholder="Trainingdata E.g: 10, 9, 8, 9, 10"
+          matInput
+          type="text"
+          name="training"
+          id="training"
+          formControlName="training"
+          #training
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="w-full">
+      <button
+        mat-raised-button
+        class="flex-1 text-2xl"
+        type="submit"
+        color="primary"
+        id="submit"
+      >
+        Submit Training Session
+      </button>
+    </div>
+  </div>
+</form>

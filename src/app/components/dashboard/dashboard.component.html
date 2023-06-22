@@ -1,0 +1,33 @@
+<h1>Dashboard</h1>
+<div *ngIf="user?.token; else RegisterTemplate">
+  <h1>{{ user?.user_metadata?.full_name }}</h1>
+  <mat-list>
+    <mat-list-item>
+      <span matListItemTitle>Token (internal use):</span>
+      <span matListItemLine>
+        {{ shortToken(user?.token?.access_token) }}
+      </span>
+    </mat-list-item>
+    <mat-list-item
+      ><span matListItemTitle>Email:</span>
+      <span matListItemLine>
+        {{ user?.email }}
+      </span></mat-list-item
+    >
+    <mat-list-item
+      ><span matListItemTitle>ID (internal use):</span>
+      <span matListItemLine>
+        {{ user?.id }}
+      </span></mat-list-item
+    >
+  </mat-list>
+  <button mat-raised-button color="primary" (click)="logout()">LOGOUT</button>
+</div>
+
+<ng-template #RegisterTemplate>
+  <h2>Please REGISTER / LOG IN</h2>
+</ng-template>
+<br />
+<button (click)="refreshUser()" color="accent" mat-raised-button>
+  Refresh User
+</button>

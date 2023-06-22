@@ -1,0 +1,14 @@
+<h1>History</h1>
+<button mat-raised-button color="primary" (click)="deleteHistory()">
+  Delete All History
+</button>
+<br />
+<div *ngIf="trainingsList?.length">
+  <h2>TOTAL PUSHUPS:</h2>
+  <h2>{{ getTotalPushups() }}</h2>
+</div>
+<div *ngFor="let trainings of trainingsList">
+  {{ trainings?.date | date }} - {{ trainings?.name }}
+  <div>{{ getTrainingString(trainings?.training) }}</div>
+  <div>Total = {{ getTotalSum(trainings?.training) }}</div>
+</div>

@@ -1,1 +1,46 @@
-<h1>Hello world</h1>
+<div class="container text-center">
+  <!--- TOOLBAR / HEADER -->
+  <mat-toolbar color="primary" class="flex justify-between items-center">
+    <div>
+      <button mat-icon-button disabled>
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div>
+      <span class="inline-block">{{ title }}</span>
+    </div>
+    <div>
+      <!-- 3rd div so that the text stays in the center-->
+      <div *ngIf="!loggedIn; else loggedInTemplate">
+        <button mat-button (click)="login()">LOGIN</button>
+        <button mat-button (click)="signup()">SIGNUP</button>
+      </div>
+
+      <ng-template #loggedInTemplate>
+        <button class="ml-6" (click)="logout()" mat-raised-button>
+          LogOut
+        </button></ng-template
+      >
+    </div>
+  </mat-toolbar>
+
+  <!-- NAVIGATION -->
+
+  <ul class="flex mx-auto justify-center w-full mt-1 mb-4">
+    <li
+      *ngFor="let nav of filteredNavigationList"
+      routerLinkActive="bg-gray-300 hover:bg-gray-300 hover:text-black"
+      class="cursor-pointer flex-1 py-2 text-xl font-normal text-black hover:bg-blue-800 hover:text-white"
+    >
+      <a class="block w-full h-full" [routerLink]="nav.link">{{ nav.text }}</a>
+    </li>
+  </ul>
+  <!-- ROUTER OUTLET-->
+  <router-outlet></router-outlet>
+
+  <!-- Show Overview-->
+
+  <!-- Show Calendar and Missing Dates - Overview-->
+
+  <!-- Show Graph of Amounts and set and Reps etc-->
+</div>
