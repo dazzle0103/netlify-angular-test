@@ -46,6 +46,10 @@ export class TrackingFormComponent {
     };
   }
 
+  get t() {
+    return this.trainingForm.controls;
+  }
+
   async submitTraining(): Promise<void> {
     const date = new Date().toISOString().split('T')[0];
 
