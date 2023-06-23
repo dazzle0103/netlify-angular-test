@@ -12,8 +12,9 @@ exports.handler = async function (event, context) {
 
     const trainingData = JSON.parse(event.body);
     trainingData["userId"] = user.sub;
-    console.log("event-body+userId:", trainingData);
+
     const doc = await createNewEntry(trainingData);
+    console.log(doc);
     await disconectDB(con);
 
     return {
@@ -28,7 +29,7 @@ exports.handler = async function (event, context) {
       statusCode: 401,
       body: JSON.stringify({
         file: "writeData.js",
-        error: "Not Logged in, invalid UserID",
+        newEntry: null,
       }),
     };
   }

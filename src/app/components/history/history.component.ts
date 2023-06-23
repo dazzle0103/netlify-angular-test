@@ -5,6 +5,7 @@ import { DatabaseService } from 'src/app/services/database.service';
 import { UserService } from 'src/app/services/user.service';
 
 import { MatButtonModule } from '@angular/material/button';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-history',
@@ -16,37 +17,42 @@ import { MatButtonModule } from '@angular/material/button';
 export class HistoryComponent implements OnInit {
   trainingsList: any = [];
   databaseService: DatabaseService = inject(DatabaseService);
+  cacheService: CacheService = inject(CacheService);
   userService: UserService = inject(UserService);
 
-  constructor() {}
-
   async ngOnInit() {
-    // TODO WRITE THIS CLEANER?
     if (await this.userService.getIsLoggedIn()) {
       const user = await this.userService.getUser();
-      const cache = this.databaseService.getCachedData(
+      this.trainingsList = this.cacheService.getCache(
         user?.token?.access_token
-      );
-      if (cache?.data?.length) {
-        this.trainingsList = cache?.data;
-      }
-
-      let updatedCache = await this.databaseService.getUpdatedCache(
-        user?.token?.access_token
-      );
-      this.trainingsList = updatedCache?.data;
+      ).data;
     }
   }
 
   async deleteHistory() {
-    if (await this.userService.getIsLoggedIn()) {
+    if ((await this.userService.getIsLoggedIn()) && this.trainingsList.length) {
       const user = await this.userService.getUser();
-      await this.databaseService.deleteTraining(user?.token?.access_token);
 
-      let updatedCache = await this.databaseService.getUpdatedCache(
+      // Positive Deletion
+      this.cacheService.clearCache(user?.token?.access_token);
+      this.trainingsList = this.cacheService.getCache(
+        user?.token?.access_token
+      ).data;
+
+      const deletedResponse = await this.databaseService.deleteTraining(
         user?.token?.access_token
       );
-      this.trainingsList = updatedCache?.data;
+      if (deletedResponse.deletedCount <= 0) {
+        // Error... Revert cache
+        alert('Error deleting History');
+        this.cacheService.updateCacheFromDatabase(user?.token?.access_token);
+        this.trainingsList = this.cacheService.getCache(
+          user?.token?.access_token
+        ).data;
+      } else {
+        // all good. nothing else to do?
+        alert('Deletion Completed in database');
+      }
     } else {
       // error
       alert(`ERROR: No User logged in!`);

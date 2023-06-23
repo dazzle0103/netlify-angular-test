@@ -19,7 +19,7 @@ exports.handler = async function (event, context) {
       statusCode: 401,
       body: JSON.stringify({
         file: "readData.js",
-        error: "Not Logged in, invalid UserID",
+        data: [],
       }),
     };
   }

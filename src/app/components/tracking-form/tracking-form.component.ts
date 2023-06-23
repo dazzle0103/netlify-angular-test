@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { DatabaseService } from 'src/app/services/database.service';
 import { UserService } from 'src/app/services/user.service';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-tracking-form',
@@ -34,6 +35,7 @@ import { UserService } from 'src/app/services/user.service';
 export class TrackingFormComponent {
   databaseService: DatabaseService = inject(DatabaseService);
   userService: UserService = inject(UserService);
+  cacheService: CacheService = inject(CacheService);
 
   trainingForm = new FormGroup({
     training: new FormControl('', [this.trainingsValidator(/^[0-9, ]*$/)]),
@@ -87,8 +89,13 @@ export class TrackingFormComponent {
       return;
     }
     console.log('SUBMITTING TRAINING - Begin');
+    //Positive Update
+    this.cacheService.addTrainingToCache(
+      trainingsData,
+      currUser?.token?.access_token
+    );
 
-    let response = await this.databaseService.writeTraining(
+    const response = await this.databaseService.writeTraining(
       trainingsData,
       currUser?.token?.access_token
     );
@@ -101,6 +108,10 @@ export class TrackingFormComponent {
       );
     } else {
       // error
+      // Revert Positive Update
+      this.cacheService.removeLastTrainingFromCache(
+        currUser?.token?.access_token
+      );
       alert(`ERROR: ${response.error}`);
     }
   }
