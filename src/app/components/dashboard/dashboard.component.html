@@ -1,6 +1,7 @@
 <h1>Dashboard</h1>
-<h2>USER$</h2>
+
 <div *ngIf="isLoggedIn$; else RegisterTemplate">
+  <h2>USER$</h2>
   <h1>{{ user$?.user_metadata?.full_name }}</h1>
   <mat-list>
     <mat-list-item>
@@ -31,9 +32,10 @@
 <br />
 <button (click)="refresh()" color="accent" mat-raised-button>Refresh</button>
 
-<hr class="border-black border-4" />
-<h2>IsLoggedIn$</h2>
-<div *ngIf="isLoggedIn$">LOGGED IN</div>
-<div *ngIf="!isLoggedIn$">LOGGED OUT</div>
+<div class="mt-4">
+  <h2>IsLoggedIn$</h2>
+  <div *ngIf="isLoggedIn$">LOGGED IN</div>
+  <div *ngIf="!isLoggedIn$">LOGGED OUT</div>
 
-<button mat-raised-button color="primary" (click)="login()">LOGIN</button>
+  <button mat-raised-button color="primary" (click)="login()">LOGIN</button>
+</div>
