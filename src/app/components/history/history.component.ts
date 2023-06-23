@@ -19,10 +19,14 @@ export class HistoryComponent implements OnInit {
   userService: UserService = inject(UserService);
 
   constructor() {}
+
   async ngOnInit() {
-    const user = this.userService.getUser();
-    if (user) {
-      let cache = this.databaseService.getCachedData(user?.token?.access_token);
+    // TODO WRITE THIS CLEANER?
+    if (await this.userService.getIsLoggedIn()) {
+      const user = await this.userService.getUser();
+      const cache = this.databaseService.getCachedData(
+        user?.token?.access_token
+      );
       if (cache?.data?.length) {
         this.trainingsList = cache?.data;
       }
@@ -35,14 +39,18 @@ export class HistoryComponent implements OnInit {
   }
 
   async deleteHistory() {
-    //@ts-ignore
-    const user = this.userService.getUser();
-    await this.databaseService.deleteTraining(user?.token?.access_token);
+    if (await this.userService.getIsLoggedIn()) {
+      const user = await this.userService.getUser();
+      await this.databaseService.deleteTraining(user?.token?.access_token);
 
-    let updatedCache = await this.databaseService.getUpdatedCache(
-      user?.token?.access_token
-    );
-    this.trainingsList = updatedCache?.data;
+      let updatedCache = await this.databaseService.getUpdatedCache(
+        user?.token?.access_token
+      );
+      this.trainingsList = updatedCache?.data;
+    } else {
+      // error
+      alert(`ERROR: No User logged in!`);
+    }
   }
 
   getTotalSum(arr: number[]) {

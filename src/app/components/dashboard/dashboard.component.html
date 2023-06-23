@@ -1,23 +1,24 @@
 <h1>Dashboard</h1>
-<div *ngIf="user; else RegisterTemplate">
-  <h1>{{ user?.user_metadata?.full_name }}</h1>
+<h2>USER$ - TESTING</h2>
+<div *ngIf="isLoggedIn$; else RegisterTemplate">
+  <h1>{{ user$?.user_metadata?.full_name }}</h1>
   <mat-list>
     <mat-list-item>
       <span matListItemTitle>Token (internal use):</span>
       <span matListItemLine>
-        {{ shortToken(user?.token?.access_token) }}
+        {{ shortToken(user$?.token?.access_token) }}
       </span>
     </mat-list-item>
     <mat-list-item
       ><span matListItemTitle>Email:</span>
       <span matListItemLine>
-        {{ user?.email }}
+        {{ user$?.email }}
       </span></mat-list-item
     >
     <mat-list-item
       ><span matListItemTitle>ID (internal use):</span>
       <span matListItemLine>
-        {{ user?.id }}
+        {{ user$?.id }}
       </span></mat-list-item
     >
   </mat-list>
@@ -32,7 +33,9 @@
   Refresh User
 </button>
 
-<button (click)="incrementTest()" color="accent" mat-raised-button>
-  TEST BUTTON
-</button>
-<h1>TESTDATA: {{ test$ }}</h1>
+<hr class="border-black border-4" />
+<h2>IsLoggedIn$ - TESTING</h2>
+<div *ngIf="isLoggedIn$">LOGGED IN</div>
+<div *ngIf="!isLoggedIn$">LOGGED OUT</div>
+
+<button mat-raised-button color="primary" (click)="login()">LOGIn</button>

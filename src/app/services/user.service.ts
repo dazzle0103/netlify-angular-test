@@ -5,78 +5,81 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-  user: any;
-  private test$ = new BehaviorSubject<number>(0);
+  //@ts-ignore
+  user$ = new BehaviorSubject<any>(netlifyIdentity.currentUser());
+  private isLoggedIn$ = new BehaviorSubject<boolean>(false);
 
-  incrementTest() {
-    this.test$.next(this.test$.value + 1);
+  setIsLoggedIn(login: boolean) {
+    console.log(
+      'setting isLoggedIn$ to:',
+      login,
+      ' But is my Component rerendering?'
+    );
+    this.isLoggedIn$.next(login);
   }
-  async getTestData() {
-    return await firstValueFrom(this.test$);
+
+  async getIsLoggedIn() {
+    return await firstValueFrom(this.isLoggedIn$);
   }
 
   login() {
-    this.user = this.getUser();
     //@ts-ignore
     netlifyIdentity.open('login');
-    if (this.user) {
-      return true;
-    }
-    return false;
   }
   signup() {
-    this.user = this.getUser();
     //@ts-ignore
     netlifyIdentity.open('signup');
-    if (this.user) {
-      return true;
-    }
-    return false;
   }
-  isLoggedIn() {
-    return this.getUser() ? true : false;
-  }
-
   logout() {
     //@ts-ignore
     netlifyIdentity.logout();
-    //@ts-ignore
-    this.user = netlifyIdentity.currentUser();
-    return this.user ? true : false;
   }
 
-  getUser() {
+  setUser(user: any) {
+    //@ts-ignore
+    this.user$.next(user);
+  }
+  async getUser() {
     //@ts-ignore
     this.user = netlifyIdentity.currentUser();
-    return this.user;
+    return await firstValueFrom(this.user$);
   }
 
   constructor() {
     //@ts-ignore
-    this.user = netlifyIdentity.currentUser();
-    //@ts-ignore
     netlifyIdentity.on('init', (user) => {
-      //@ts-ignore
-      console.log('Init detected', user, netlifyIdentity.currentUser());
       if (user) {
-        this.user = user;
+        console.log('netlifyIdentity - Init with User Object:', user);
+        this.setIsLoggedIn(true);
+        this.setUser(user);
+      } else {
+        console.log('netlifyIdentity - Init with undefined User Oject');
+        this.setIsLoggedIn(false);
+        this.setUser(user);
       }
     });
 
     //@ts-ignore
     netlifyIdentity.on('login', (user) => {
-      //@ts-ignore
-      console.log('Login detected', user, netlifyIdentity.currentUser());
       if (user) {
-        this.user = user;
+        console.log('netlifyIdentity - LOGIN with User Object:', user);
+        this.setIsLoggedIn(true);
+        this.setUser(user);
+      } else {
+        console.log(
+          'netlifyIdentity - LOGIN without User Oject, I dont think this path is possible here',
+          user
+        );
+        this.setIsLoggedIn(false);
+        this.setUser(user);
       }
     });
     //@ts-ignore
     netlifyIdentity.on('logout', () => {
+      console.log('netlifyIdentity - LOGOUT, NO OBJECT');
+      this.setIsLoggedIn(false);
       //@ts-ignore
-      console.log('Logout detected', netlifyIdentity.currentUser());
-      this.user = undefined;
-      console.log('after this.user', this.user);
+      this.setUser(netlifyIdentity.currentUser());
     });
   }
 }

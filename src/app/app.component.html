@@ -11,7 +11,7 @@
     </div>
     <div>
       <!-- 3rd div so that the text stays in the center-->
-      <div *ngIf="!loggedIn; else loggedInTemplate">
+      <div *ngIf="!loggedIn$; else loggedInTemplate">
         <button mat-button (click)="login()">LOGIN</button>
         <button mat-button (click)="signup()">SIGNUP</button>
       </div>

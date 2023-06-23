@@ -13,35 +13,37 @@ import { MatListModule } from '@angular/material/list';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  user: any;
   userService: UserService = inject(UserService);
 
-  test$: any;
-
-  loggedIn: boolean = false;
+  user$: any;
+  isLoggedIn$: any;
   async ngOnInit() {
-    this.user = this.userService.getUser();
-    this.loggedIn = this.userService.isLoggedIn();
-    this.test$ = await this.userService.getTestData();
+    this.user$ = await this.userService.getUser();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
   }
 
-  incrementTest() {
-    this.userService.incrementTest();
+  async login() {
+    this.userService.login();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    this.user$ = await this.userService.getUser();
   }
-  login() {
-    this.loggedIn = this.userService.login();
+  async logout() {
+    this.userService.logout();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    this.user$ = await this.userService.getUser();
   }
-  logout() {
-    this.loggedIn = this.userService.logout();
-  }
-  signUp() {
-    this.loggedIn = this.userService.signup();
+  async signUp() {
+    this.userService.signup();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    this.user$ = await this.userService.getUser();
   }
 
-  refreshUser() {
-    this.user = this.userService.getUser();
-    this.loggedIn = this.userService.isLoggedIn();
-    console.log(this.user?.token?.access_token);
+  async refreshUser() {
+    this.user$ = await this.userService.getUser();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    console.log('refreshUser-function:');
+    console.log(' -> user$:', this.user$);
+    console.log(' -> isLoggedIn$:', this.isLoggedIn$);
   }
 
   shortToken(token: string) {

@@ -53,15 +53,21 @@ export class TrackingFormComponent {
   async submitTraining(): Promise<void> {
     const date = new Date().toISOString().split('T')[0];
 
-    //@ts-ignore
-    let currUser = this.userService.getUser();
-    let name = currUser?.user_metadata?.full_name || 'DefaultGuestUser';
+    const currUser = await this.userService.getUser();
+    const name = currUser?.user_metadata?.full_name || 'DefaultGuestUser';
 
-    console.log('IS form Valid', this.trainingForm.invalid);
+    // checking form?
+    console.log(
+      'IS form Valid',
+      !this.trainingForm.invalid,
+      'errors:',
+      this.trainingForm
+    );
     if (this.trainingForm.invalid) {
       // invalid form
       return;
     }
+
     const training = this.trainingForm.value.training
       ?.split(/[,\s-]+/)
       .filter((el) => el)
@@ -73,17 +79,25 @@ export class TrackingFormComponent {
       name: name,
     };
 
+    this.trainingForm.reset();
+    this.trainingForm.controls.training.setErrors(null);
+    if (!currUser) {
+      // not logged In
+      return;
+    }
+    console.log('SUBMITTING TRAINING - Begin');
+
     let response = await this.databaseService.writeTraining(
       trainingsData,
       currUser?.token?.access_token
     );
+
     if (!response.error) {
       // all ok
       alert(
         'Training Submitted: ' +
           JSON.stringify(trainingsData.training?.join(' - '))
       );
-      this.trainingForm.reset();
     } else {
       // error
       alert(`ERROR: ${response.error}`);
