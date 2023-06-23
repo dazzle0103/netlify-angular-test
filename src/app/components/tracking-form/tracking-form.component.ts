@@ -83,6 +83,7 @@ export class TrackingFormComponent {
     this.trainingForm.controls.training.setErrors(null);
     if (!currUser) {
       // not logged In
+      alert(`ERROR: Not Logged In.`);
       return;
     }
     console.log('SUBMITTING TRAINING - Begin');
