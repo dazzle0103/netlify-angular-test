@@ -10,15 +10,15 @@
       <span class="inline-block">{{ title }}</span>
     </div>
     <div>
-      <!-- 3rd div so that the text stays in the center-->
-      <div *ngIf="!loggedIn$; else loggedInTemplate">
+      <button mat-button (click)="refresh()" color="accent">refresh</button>
+      <div *ngIf="!isLoggedIn$; else loggedInTemplate">
         <button mat-button (click)="login()">LOGIN</button>
         <button mat-button (click)="signup()">SIGNUP</button>
       </div>
 
       <ng-template #loggedInTemplate>
         <button class="ml-6" (click)="logout()" mat-raised-button>
-          LogOut
+          LOGOUT
         </button></ng-template
       >
     </div>

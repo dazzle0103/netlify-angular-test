@@ -1,5 +1,5 @@
 <h1>Dashboard</h1>
-<h2>USER$ - TESTING</h2>
+<h2>USER$</h2>
 <div *ngIf="isLoggedIn$; else RegisterTemplate">
   <h1>{{ user$?.user_metadata?.full_name }}</h1>
   <mat-list>
@@ -29,13 +29,11 @@
   <h2>Please REGISTER / LOG IN</h2>
 </ng-template>
 <br />
-<button (click)="refreshUser()" color="accent" mat-raised-button>
-  Refresh User
-</button>
+<button (click)="refresh()" color="accent" mat-raised-button>Refresh</button>
 
 <hr class="border-black border-4" />
-<h2>IsLoggedIn$ - TESTING</h2>
+<h2>IsLoggedIn$</h2>
 <div *ngIf="isLoggedIn$">LOGGED IN</div>
 <div *ngIf="!isLoggedIn$">LOGGED OUT</div>
 
-<button mat-raised-button color="primary" (click)="login()">LOGIn</button>
+<button mat-raised-button color="primary" (click)="login()">LOGIN</button>

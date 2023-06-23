@@ -32,13 +32,13 @@ export class DashboardComponent implements OnInit {
     this.isLoggedIn$ = await this.userService.getIsLoggedIn();
     this.user$ = await this.userService.getUser();
   }
-  async signUp() {
+  async signup() {
     this.userService.signup();
     this.isLoggedIn$ = await this.userService.getIsLoggedIn();
     this.user$ = await this.userService.getUser();
   }
 
-  async refreshUser() {
+  async refresh() {
     this.user$ = await this.userService.getUser();
     this.isLoggedIn$ = await this.userService.getIsLoggedIn();
     console.log('refreshUser-function:');

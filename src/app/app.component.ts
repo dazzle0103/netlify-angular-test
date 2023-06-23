@@ -26,10 +26,10 @@ import { UserService } from './services/user.service';
 export class AppComponent implements OnInit {
   title = 'My Push up Tracker';
   userService: UserService = inject(UserService);
-  loggedIn$: boolean = false;
+  isLoggedIn$: boolean = false;
 
   async ngOnInit() {
-    this.loggedIn$ = await this.userService.getIsLoggedIn();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
   }
 
   navigationList: { link: string; text: string; active: boolean }[] = [
@@ -47,17 +47,23 @@ export class AppComponent implements OnInit {
 
   async login() {
     this.userService.login();
-    this.loggedIn$ = await this.userService.getIsLoggedIn();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
     this.cdr.detectChanges();
   }
   async signup() {
     this.userService.signup();
-    this.loggedIn$ = await this.userService.getIsLoggedIn();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
     this.cdr.detectChanges();
   }
   async logout() {
     this.userService.logout();
-    this.loggedIn$ = await this.userService.getIsLoggedIn();
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
     this.cdr.detectChanges();
+  }
+
+  async refresh() {
+    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    console.log('refreshUser-function:');
+    console.log(' -> isLoggedIn$:', this.isLoggedIn$);
   }
 }
