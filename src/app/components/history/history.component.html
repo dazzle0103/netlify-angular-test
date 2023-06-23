@@ -4,9 +4,9 @@
 </button>
 <br />
 <div *ngIf="trainingsList?.length">
-  <h2>TOTAL PUSHUPS:</h2>
-  <h2>{{ getTotalPushups() }}</h2>
+  <h2>TOTAL PUSHUPS: {{ getTotalPushups() }}</h2>
 </div>
+<hr />
 <div *ngFor="let trainings of trainingsList">
   {{ trainings?.date | date }} - {{ trainings?.name }}
   <div>{{ getTrainingString(trainings?.training) }}</div>
