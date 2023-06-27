@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { UserService } from './services/user.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -53,16 +54,19 @@ export class AppComponent implements OnInit {
   async signup() {
     this.userService.signup();
     this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+
     this.cdr.detectChanges();
   }
   async logout() {
     this.userService.logout();
     this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+
     this.cdr.detectChanges();
   }
 
   async refresh() {
     this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+
     console.log('refreshUser-function:');
     console.log(' -> isLoggedIn$:', this.isLoggedIn$);
   }

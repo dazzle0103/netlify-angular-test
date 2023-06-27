@@ -6,9 +6,7 @@ import { CacheService } from './cache.service';
   providedIn: 'root',
 })
 export class UserService {
-  //@ts-ignore
-  user$ = new BehaviorSubject<any>(netlifyIdentity.currentUser());
-  private isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = new BehaviorSubject<boolean>(false);
   cacheService: CacheService = inject(CacheService);
 
   setIsLoggedIn(login: boolean) {
@@ -37,14 +35,9 @@ export class UserService {
     netlifyIdentity.logout();
   }
 
-  setUser(user: any) {
-    //@ts-ignore
-    this.user$.next(user);
-  }
   async getUser() {
     //@ts-ignore
-    this.user$ = netlifyIdentity.currentUser();
-    return await firstValueFrom(this.user$);
+    return netlifyIdentity.currentUser();
   }
 
   constructor() {
@@ -53,11 +46,9 @@ export class UserService {
       if (user) {
         console.log('netlifyIdentity - Init with User Object:', user);
         this.setIsLoggedIn(true);
-        this.setUser(user);
       } else {
         console.log('netlifyIdentity - Init with undefined User Oject');
         this.setIsLoggedIn(false);
-        this.setUser(user);
       }
     });
 
@@ -66,7 +57,6 @@ export class UserService {
       if (user) {
         console.log('netlifyIdentity - LOGIN with User Object:', user);
         this.setIsLoggedIn(true);
-        this.setUser(user);
         await this.cacheService.updateCacheFromDatabase(
           user?.token?.access_token
         );
@@ -76,7 +66,6 @@ export class UserService {
           user
         );
         this.setIsLoggedIn(false);
-        this.setUser(user);
         this.cacheService.clearCache(user?.token?.access_token);
       }
     });
@@ -84,8 +73,6 @@ export class UserService {
     netlifyIdentity.on('logout', () => {
       console.log('netlifyIdentity - LOGOUT, NO OBJECT');
       this.setIsLoggedIn(false);
-      //@ts-ignore
-      this.setUser(netlifyIdentity.currentUser());
     });
   }
 }
