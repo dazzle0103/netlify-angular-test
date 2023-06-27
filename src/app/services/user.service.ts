@@ -43,7 +43,7 @@ export class UserService {
   }
   async getUser() {
     //@ts-ignore
-    this.user = netlifyIdentity.currentUser();
+    this.user$ = netlifyIdentity.currentUser();
     return await firstValueFrom(this.user$);
   }
 
