@@ -21,7 +21,7 @@ export class HistoryComponent implements OnInit {
   userService: UserService = inject(UserService);
 
   async ngOnInit() {
-    if (await this.userService.getIsLoggedIn()) {
+    if (await this.userService.isLoggedIn$) {
       const user = await this.userService.getUser();
       this.trainingsList = this.cacheService.getCache(
         user?.token?.access_token
@@ -30,7 +30,7 @@ export class HistoryComponent implements OnInit {
   }
 
   async deleteHistory() {
-    if ((await this.userService.getIsLoggedIn()) && this.trainingsList.length) {
+    if ((await this.userService.isLoggedIn$) && this.trainingsList.length) {
       const user = await this.userService.getUser();
 
       // Positive Deletion

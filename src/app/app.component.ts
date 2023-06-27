@@ -27,10 +27,10 @@ import { BehaviorSubject } from 'rxjs';
 export class AppComponent implements OnInit {
   title = 'My Push up Tracker';
   userService: UserService = inject(UserService);
-  isLoggedIn$: boolean = false;
+  isLoggedIn$!: BehaviorSubject<boolean>;
 
   async ngOnInit() {
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    this.isLoggedIn$ = this.userService.isLoggedIn$;
   }
 
   navigationList: { link: string; text: string; active: boolean }[] = [
@@ -44,30 +44,21 @@ export class AppComponent implements OnInit {
   filteredNavigationList: { link: string; text: string; active: boolean }[] =
     this.navigationList.filter((el) => el.active);
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor() {}
 
   async login() {
     this.userService.login();
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
-    this.cdr.detectChanges();
   }
   async signup() {
     this.userService.signup();
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
-
-    this.cdr.detectChanges();
   }
   async logout() {
     this.userService.logout();
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
-
-    this.cdr.detectChanges();
   }
 
   async refresh() {
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
-
     console.log('refreshUser-function:');
     console.log(' -> isLoggedIn$:', this.isLoggedIn$);
+    this.isLoggedIn$ = this.userService.isLoggedIn$;
   }
 }

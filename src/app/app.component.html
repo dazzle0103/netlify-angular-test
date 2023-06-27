@@ -12,7 +12,7 @@
     <div>
       <div class="flex justify-end">
         <button mat-button (click)="refresh()" color="accent">REFRESH</button>
-        <ng-container *ngIf="isLoggedIn$; else loggedOutTemplate">
+        <ng-container *ngIf="isLoggedIn$ | async; else loggedOutTemplate">
           <button (click)="logout()" mat-raised-button>LOGOUT</button>
         </ng-container>
       </div>

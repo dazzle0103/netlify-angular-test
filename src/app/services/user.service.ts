@@ -18,10 +18,6 @@ export class UserService {
     this.isLoggedIn$.next(login);
   }
 
-  async getIsLoggedIn() {
-    return await firstValueFrom(this.isLoggedIn$);
-  }
-
   login() {
     //@ts-ignore
     netlifyIdentity.open('login');

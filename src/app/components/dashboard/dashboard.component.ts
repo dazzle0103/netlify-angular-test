@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,31 +17,30 @@ export class DashboardComponent implements OnInit {
   userService: UserService = inject(UserService);
 
   user$: any;
-  isLoggedIn$: any;
+  isLoggedIn$!: BehaviorSubject<boolean>;
+
   async ngOnInit() {
     this.user$ = await this.userService.getUser();
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    this.isLoggedIn$ = this.userService.isLoggedIn$;
   }
 
   async login() {
     this.userService.login();
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    this.isLoggedIn$ = this.userService.isLoggedIn$;
     this.user$ = await this.userService.getUser();
   }
   async logout() {
     this.userService.logout();
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
     this.user$ = await this.userService.getUser();
   }
   async signup() {
     this.userService.signup();
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
     this.user$ = await this.userService.getUser();
   }
 
   async refresh() {
     this.user$ = await this.userService.getUser();
-    this.isLoggedIn$ = await this.userService.getIsLoggedIn();
+    this.isLoggedIn$ = this.userService.isLoggedIn$;
     console.log('refreshUser-function:');
     console.log(' -> user$:', this.user$);
     console.log(' -> isLoggedIn$:', this.isLoggedIn$);
