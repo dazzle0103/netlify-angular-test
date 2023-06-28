@@ -1,21 +1,21 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { CacheService } from './cache.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  isLoggedIn$ = new BehaviorSubject<boolean>(false);
   cacheService: CacheService = inject(CacheService);
 
+  isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  //@ts-ignore
+  user$ = new BehaviorSubject<any>(netlifyIdentity.currentUser());
   setIsLoggedIn(login: boolean) {
-    console.log(
-      'setting isLoggedIn$ to:',
-      login,
-      ' But is my Component rerendering?'
-    );
     this.isLoggedIn$.next(login);
+  }
+  setUser(user: any) {
+    this.user$.next(user);
   }
 
   login() {
@@ -46,6 +46,8 @@ export class UserService {
         console.log('netlifyIdentity - Init with undefined User Oject');
         this.setIsLoggedIn(false);
       }
+      //@ts-ignore
+      this.setUser(netlifyIdentity.currentUser());
     });
 
     //@ts-ignore
@@ -64,11 +66,18 @@ export class UserService {
         this.setIsLoggedIn(false);
         this.cacheService.clearCache(user?.token?.access_token);
       }
+      //@ts-ignore
+      this.setUser(netlifyIdentity.currentUser());
     });
     //@ts-ignore
     netlifyIdentity.on('logout', () => {
       console.log('netlifyIdentity - LOGOUT, NO OBJECT');
       this.setIsLoggedIn(false);
+      //@ts-ignore
+      this.setUser(netlifyIdentity.currentUser());
+
+      console.log('login$:', this.isLoggedIn$);
+      console.log('netlifyUser$:', this.user$);
     });
   }
 }

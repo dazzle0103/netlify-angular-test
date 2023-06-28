@@ -1,25 +1,25 @@
 <h1>Dashboard</h1>
-
 <div *ngIf="isLoggedIn$ | async; else RegisterTemplate">
   <h2>USER$</h2>
-  <h1>{{ user$?.user_metadata?.full_name }}</h1>
+  <h1>{{ (user$ | async)?.user_metadata?.full_name }}</h1>
   <mat-list>
     <mat-list-item>
       <span matListItemTitle>Token (internal use):</span>
       <span matListItemLine>
-        {{ shortToken(user$?.token?.access_token) }}
+        <!--{{ user$.value?.token?.access_token }}-->
+        {{ getShortToken((user$ | async)?.token?.access_token) }}
       </span>
     </mat-list-item>
     <mat-list-item
       ><span matListItemTitle>Email:</span>
       <span matListItemLine>
-        {{ user$?.email }}
+        {{ (user$ | async)?.email }}
       </span></mat-list-item
     >
     <mat-list-item
       ><span matListItemTitle>ID (internal use):</span>
       <span matListItemLine>
-        {{ user$?.id }}
+        {{ (user$ | async)?.id }}
       </span></mat-list-item
     >
   </mat-list>
@@ -34,8 +34,8 @@
 
 <div class="mt-4">
   <h2>IsLoggedIn$</h2>
-  <div *ngIf="isLoggedIn$">LOGGED IN</div>
-  <div *ngIf="!isLoggedIn$">LOGGED OUT</div>
+  <div *ngIf="isLoggedIn$ | async">LOGGED IN</div>
+  <div *ngIf="!(isLoggedIn$ | async)">LOGGED OUT</div>
 
   <button mat-raised-button color="primary" (click)="login()">LOGIN</button>
 </div>

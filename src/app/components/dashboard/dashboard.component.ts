@@ -15,38 +15,32 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DashboardComponent implements OnInit {
   userService: UserService = inject(UserService);
-
-  user$: any;
+  user$!: BehaviorSubject<any>;
   isLoggedIn$!: BehaviorSubject<boolean>;
 
   async ngOnInit() {
-    this.user$ = await this.userService.getUser();
+    this.user$ = this.userService.user$;
     this.isLoggedIn$ = this.userService.isLoggedIn$;
   }
 
   async login() {
     this.userService.login();
-    this.isLoggedIn$ = this.userService.isLoggedIn$;
-    this.user$ = await this.userService.getUser();
   }
   async logout() {
     this.userService.logout();
-    this.user$ = await this.userService.getUser();
   }
   async signup() {
     this.userService.signup();
-    this.user$ = await this.userService.getUser();
   }
 
   async refresh() {
-    this.user$ = await this.userService.getUser();
     this.isLoggedIn$ = this.userService.isLoggedIn$;
-    console.log('refreshUser-function:');
-    console.log(' -> user$:', this.user$);
-    console.log(' -> isLoggedIn$:', this.isLoggedIn$);
+    this.user$ = this.userService.user$;
+    console.log('REFRESH-User:', this.user$);
+    console.log('REFRESH-isLoggedIn:', this.isLoggedIn$);
   }
 
-  shortToken(token: string) {
+  getShortToken(token: string) {
     return token ? `${token?.slice(0, 10)}...${token?.slice(-10)}` : '';
   }
 }
